@@ -11,5 +11,6 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % CirceVersion,
   "io.toolsplus" %% "atlassian-jwt-generators" % AtlassianJwtVersion,
   "io.toolsplus" %% "atlassian-jwt-core" % AtlassianJwtVersion,
-  "io.lemonlabs" %% "scala-uri" % "1.3.1"
+  "io.lemonlabs" %% "scala-uri" % "1.3.1",
+  "com.softwaremill.sttp" %% "core" % "1.3.8"
 )
