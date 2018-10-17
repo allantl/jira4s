@@ -1,3 +1,11 @@
 package com.allantl.jira4s.v2.domain
 
-case class Issue()
+import io.circe.{Decoder, Encoder}
+import io.circe.generic.semiauto._
+
+case class Issue(id: String)
+
+object Issue {
+  implicit val issueDecoder: Decoder[Issue] = deriveDecoder
+  implicit val issueEncoder: Encoder[Issue] = deriveEncoder
+}
