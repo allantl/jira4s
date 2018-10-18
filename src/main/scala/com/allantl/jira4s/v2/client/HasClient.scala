@@ -2,7 +2,9 @@ package com.allantl.jira4s.v2.client
 
 import com.allantl.jira4s.auth._
 import com.allantl.jira4s.v2
-import com.softwaremill.sttp.{Request, SttpBackend}
+import com.allantl.jira4s.v2.domain.errors._
+import com.softwaremill.sttp.{DeserializationError, Request, Response, StatusCodes, SttpBackend}
+import io.circe.parser._
 
 private[jira4s] trait HasAuthConfig {
 
@@ -20,13 +22,14 @@ private[jira4s] trait HasAuthConfig {
 }
 
 private[jira4s] trait HasBackend[R[_]] {
-  protected def backend: SttpBackend[R, _]
   protected lazy val rm = backend.responseMonad
+
+  protected def backend: SttpBackend[R, _]
 }
 
 private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
-  implicit class RequestOps[T, +S](req: Request[T, S]) {
-    def jiraAuthenticated[Ctx <: AuthContext](implicit userCtx: Ctx): Request[T, S] =
+  implicit class RequestOps[T](req: Request[T, Nothing]) {
+    def jiraAuthenticated[Ctx <: AuthContext](implicit userCtx: Ctx): Request[T, Nothing] =
       authConfig match {
         case BasicCredentials(_, username, password) =>
           req.auth.basic(username, password)
@@ -35,5 +38,36 @@ private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
         case _ =>
           req.auth.bearer(userCtx.accessToken)
       }
+  }
+
+  implicit class ResponseOps[T](r: R[Response[Either[DeserializationError[io.circe.Error], T]]]) {
+    def parseResponse: R[Either[JiraError, T]] = rm.map(r) {
+      case Response(Right(result), _, _, _, _) =>
+        result.fold(
+          _ => Left(JsonDeserializationError),
+          res => Right(res)
+        )
+
+      case Response(Left(errByte), statusCode, _, _, _) =>
+        val errMsg = parse(new String(errByte)).toOption
+          .flatMap(_.as[JiraResponseError].toOption)
+          .flatMap(_.errorMessages.headOption)
+
+        val err: JiraError = statusCode match {
+          case StatusCodes.Forbidden =>
+            errMsg.fold(AccessDeniedError("Access forbidden!"))(AccessDeniedError)
+
+          case StatusCodes.Unauthorized =>
+            errMsg.fold(UnauthorizedError("Invalid JIRA credentials or access forbidden!"))(UnauthorizedError)
+
+          case StatusCodes.NotFound =>
+            errMsg.fold(ResourceNotFound("Resource not found!"))(ResourceNotFound)
+
+          case _ =>
+            errMsg.fold(GenericError("Unknown Error!"))(GenericError)
+        }
+
+        Left(err)
+    }
   }
 }
