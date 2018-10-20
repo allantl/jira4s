@@ -28,6 +28,32 @@ private[jira4s] trait HasBackend[R[_]] {
 }
 
 private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
+
+  private def parseError(errByte: Array[Byte], status: Int): JiraError = {
+    val jiraResponseError = parse(new String(errByte)).toOption
+      .flatMap(_.as[JiraResponseError].toOption)
+
+    val errMsg = jiraResponseError
+      .flatMap(_.errorMessages.headOption)
+      .orElse(jiraResponseError.flatMap(_.errors.headOption.map(_._2)))
+
+    val err: JiraError = status match {
+      case StatusCodes.Forbidden =>
+        errMsg.fold(AccessDeniedError("Access forbidden!"))(AccessDeniedError)
+
+      case StatusCodes.Unauthorized =>
+        errMsg.fold(UnauthorizedError("Invalid JIRA credentials or access forbidden!"))(
+          UnauthorizedError)
+
+      case StatusCodes.NotFound =>
+        errMsg.fold(ResourceNotFound("Resource not found!"))(ResourceNotFound)
+
+      case _ =>
+        errMsg.fold(GenericError("Unknown Error!"))(GenericError)
+    }
+    err
+  }
+
   implicit class RequestOps[T](req: Request[T, Nothing]) {
     def jiraAuthenticated[Ctx <: AuthContext](implicit userCtx: Ctx): Request[T, Nothing] =
       authConfig match {
@@ -40,6 +66,16 @@ private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
       }
   }
 
+  implicit class SttpResponseOps(r: R[Response[String]]) {
+    def parseResponse: R[Either[JiraError, Unit]] = rm.map(r) {
+      case Response(Right(_), _, _, _, _) =>
+        Right(())
+
+      case Response(Left(errByte), statusCode, _, _, _) =>
+        Left(parseError(errByte, statusCode))
+    }
+  }
+
   implicit class ResponseOps[T](r: R[Response[Either[DeserializationError[io.circe.Error], T]]]) {
     def parseResponse: R[Either[JiraError, T]] = rm.map(r) {
       case Response(Right(result), _, _, _, _) =>
@@ -49,25 +85,7 @@ private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
         )
 
       case Response(Left(errByte), statusCode, _, _, _) =>
-        val errMsg = parse(new String(errByte)).toOption
-          .flatMap(_.as[JiraResponseError].toOption)
-          .flatMap(_.errorMessages.headOption)
-
-        val err: JiraError = statusCode match {
-          case StatusCodes.Forbidden =>
-            errMsg.fold(AccessDeniedError("Access forbidden!"))(AccessDeniedError)
-
-          case StatusCodes.Unauthorized =>
-            errMsg.fold(UnauthorizedError("Invalid JIRA credentials or access forbidden!"))(UnauthorizedError)
-
-          case StatusCodes.NotFound =>
-            errMsg.fold(ResourceNotFound("Resource not found!"))(ResourceNotFound)
-
-          case _ =>
-            errMsg.fold(GenericError("Unknown Error!"))(GenericError)
-        }
-
-        Left(err)
+        Left(parseError(errByte, statusCode))
     }
   }
 }
