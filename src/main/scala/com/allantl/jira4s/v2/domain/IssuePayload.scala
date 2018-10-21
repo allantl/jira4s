@@ -17,6 +17,9 @@ case class IssuePayload(
 
 object IssuePayload {
 
+  def apply(fields: Field*): IssuePayload =
+    IssuePayload(fields = fields)
+
   def apply(field: Field): IssuePayload =
     IssuePayload(Seq(field))
 

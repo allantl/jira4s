@@ -30,6 +30,26 @@ private[jira4s] trait IssueClient[R[_], T <: AuthContext] extends HasClient[R] {
       .send()
       .parseResponse
 
+  def updateIssue(
+      issueId: String,
+      issuePayload: IssuePayload,
+      notifyUsers: Boolean = true,
+      overrideScreenSecurity: Boolean = false,
+      overrideEditableFlag: Boolean = false
+  )(implicit userCtx: T): R[Either[JiraError, Unit]] = {
+    val params = Map(
+      "notifyUsers" -> notifyUsers.toString,
+      "overrideScreenSecurity" -> overrideScreenSecurity.toString,
+      "overrideEditableFlag" -> overrideEditableFlag.toString
+    )
+    sttp
+      .put(uri"$restEndpoint/issue/$issueId".params(params))
+      .body(issuePayload.asJson)
+      .jiraAuthenticated
+      .send()
+      .parseResponse
+  }
+
   def deleteIssue(issueId: String, deleteSubTasks: Boolean = false)(
       implicit userCtx: T
   ): R[Either[JiraError, Unit]] =

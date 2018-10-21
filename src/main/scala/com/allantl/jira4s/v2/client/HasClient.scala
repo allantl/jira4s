@@ -66,7 +66,7 @@ private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
       }
   }
 
-  implicit class SttpResponseOps(r: R[Response[String]]) {
+  implicit class _ResponseOps(r: R[Response[String]]) {
     def parseResponse: R[Either[JiraError, Unit]] = rm.map(r) {
       case Response(Right(_), _, _, _, _) =>
         Right(())
