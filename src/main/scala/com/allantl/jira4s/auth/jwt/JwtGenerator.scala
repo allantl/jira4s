@@ -11,10 +11,11 @@ import io.toolsplus.atlassian.jwt.{HttpRequestCanonicalizer, JwtBuilder}
 
 import scala.util.Try
 
-class JwtGenerator(acConfig: AtlassianConnectConfig) {
+private[jira4s] object JwtGenerator {
 
   def generateToken(httpMethod: String, uri: String)(
-      implicit acContext: AuthContext
+      implicit acContext: AuthContext,
+      acConfig: AtlassianConnectConfig
   ): Either[JwtGeneratorError, String] =
     for {
       uri <- toJavaUri(uri)
@@ -25,7 +26,8 @@ class JwtGenerator(acConfig: AtlassianConnectConfig) {
     } yield token
 
   private def createToken(httpMethod: String, uri: URI)(
-      implicit acContext: AuthContext
+      implicit acContext: AuthContext,
+      acConfig: AtlassianConnectConfig
   ): Either[JwtGeneratorError, String] = {
     val canonicalHttpRequest = CanonicalURIHttpRequest(httpMethod, uri)
     val queryHash = HttpRequestCanonicalizer.computeCanonicalRequestHash(canonicalHttpRequest)

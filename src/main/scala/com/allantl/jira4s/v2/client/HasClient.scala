@@ -1,6 +1,7 @@
 package com.allantl.jira4s.v2.client
 
 import com.allantl.jira4s.auth._
+import com.allantl.jira4s.auth.jwt.JwtGenerator
 import com.allantl.jira4s.v2
 import com.allantl.jira4s.v2.domain.errors._
 import com.softwaremill.sttp.{DeserializationError, Request, Response, StatusCodes, SttpBackend}
@@ -15,7 +16,7 @@ private[jira4s] trait HasAuthConfig {
 
   protected def instanceUrl[T <: AuthContext](implicit userCtx: T): String =
     authConfig match {
-      case BasicCredentials(jiraUrl, _, _) => jiraUrl
+      case BasicAuthentication(jiraUrl, _, _) => jiraUrl
       case ApiToken(jiraUrl, _, _) => jiraUrl
       case _ => userCtx.instanceUrl
     }
@@ -57,10 +58,17 @@ private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
   implicit class RequestOps[T](req: Request[T, Nothing]) {
     def jiraAuthenticated[Ctx <: AuthContext](implicit userCtx: Ctx): Request[T, Nothing] =
       authConfig match {
-        case BasicCredentials(_, username, password) =>
+        case BasicAuthentication(_, username, password) =>
           req.auth.basic(username, password)
         case ApiToken(_, email, apiToken) =>
           req.auth.basic(email, apiToken)
+        case ac: AtlassianConnectConfig =>
+          JwtGenerator
+            .generateToken(req.method.m.capitalize, req.uri.toString())(userCtx, ac)
+            .fold(
+              _ => req,
+              token => req.header("Authorization", s"JWT $token", replaceExisting = true)
+            )
         case _ =>
           req.auth.bearer(userCtx.accessToken)
       }

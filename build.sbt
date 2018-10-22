@@ -1,5 +1,7 @@
 name := "jira4s"
 
+organization := "com.allantl"
+
 scalaVersion := "2.12.7"
 
 val CirceVersion = "0.10.0"
