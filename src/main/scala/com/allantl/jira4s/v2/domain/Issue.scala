@@ -9,7 +9,12 @@ case class Issue(
     key: String,
     fields: Json,
     properties: Option[Json] = None,
-    renderedFields: Option[Json] = None
+    renderedFields: Option[Json] = None,
+    names: Option[Json] = None,
+    operations: Option[Json] = None,
+    editmeta: Option[Json] = None,
+    changelog: Option[Changelog] = None,
+    versionedRepresentations: Option[Json]
 )
 
 object Issue {
