@@ -31,7 +31,7 @@ object HistoryItem {
   implicit val encoder: Encoder[HistoryItem] = (hi: HistoryItem) =>
     Json.obj(
       ("field", Json.fromString(hi.field)),
-      ("fieldType", Json.fromString(hi.fieldType)),
+      ("fieldtype", Json.fromString(hi.fieldType)),
       ("fieldId", Json.fromString(hi.fieldId)),
       ("from", hi.from.fold(Json.Null)(Json.fromString)),
       ("fromString", hi.fromString.fold(Json.Null)(Json.fromString)),
@@ -42,7 +42,7 @@ object HistoryItem {
   implicit val decoder: Decoder[HistoryItem] = (c: HCursor) =>
     for {
       field <- c.downField("field").as[String]
-      fieldType <- c.downField("fieldType").as[String]
+      fieldType <- c.downField("fieldtype").as[String]
       fieldId <- c.downField("fieldId").as[String]
       from <- c.downField("from").as[Option[String]]
       fromString <- c.downField("fromString").as[Option[String]]

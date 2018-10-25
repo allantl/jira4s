@@ -9,7 +9,7 @@ case class SearchResults(
     maxResults: Int,
     total: Int,
     issues: List[Issue],
-    warningMessages: List[String]
+    warningMessages: Option[List[String]] = None
 )
 
 object SearchResults {

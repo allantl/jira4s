@@ -9,7 +9,7 @@ import io.circe.syntax._
 
 private[jira4s] trait IssueClient[R[_], T <: AuthContext] extends HasClient[R] {
 
-  implicit val be: SttpBackend[R, _] = backend
+  private implicit val be: SttpBackend[R, _] = backend
 
   def getIssue(issueId: String)(implicit userCtx: T): R[Either[JiraError, Issue]] =
     sttp

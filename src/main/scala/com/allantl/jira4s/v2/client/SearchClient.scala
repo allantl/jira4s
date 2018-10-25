@@ -10,7 +10,7 @@ import com.softwaremill.sttp.{SttpBackend, sttp, _}
 
 private[jira4s] trait SearchClient[R[_], T <: AuthContext] extends HasClient[R] {
 
-  implicit val be: SttpBackend[R, _] = backend
+  private implicit val be: SttpBackend[R, _] = backend
 
   def search(
       jql: String,

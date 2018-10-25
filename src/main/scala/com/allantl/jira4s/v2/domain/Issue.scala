@@ -7,14 +7,14 @@ case class Issue(
     id: String,
     self: String,
     key: String,
-    fields: Json,
+    fields: Option[Json] = None,
     properties: Option[Json] = None,
     renderedFields: Option[Json] = None,
     names: Option[Json] = None,
     operations: Option[Json] = None,
     editmeta: Option[Json] = None,
     changelog: Option[Changelog] = None,
-    versionedRepresentations: Option[Json]
+    versionedRepresentations: Option[Json] = None
 )
 
 object Issue {
