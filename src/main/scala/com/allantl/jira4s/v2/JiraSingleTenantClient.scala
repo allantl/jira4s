@@ -1,10 +1,14 @@
 package com.allantl.jira4s.v2
 
 import com.allantl.jira4s.auth.{ApiToken, BasicAuthentication, NoCtx}
-import com.allantl.jira4s.v2.client.{IssueClient, SearchClient}
+import com.allantl.jira4s.v2.client.{FieldClient, IssueClient, ProjectClient, SearchClient}
 import com.softwaremill.sttp.SttpBackend
 
-sealed trait JiraSingleTenantClient[R[_]] extends IssueClient[R, NoCtx] with SearchClient[R, NoCtx]
+sealed trait JiraSingleTenantClient[R[_]]
+    extends IssueClient[R, NoCtx]
+    with SearchClient[R, NoCtx]
+    with ProjectClient[R, NoCtx]
+    with FieldClient[R, NoCtx]
 
 object JiraSingleTenantClient {
   def apply[R[_], S](apiToken: ApiToken)(

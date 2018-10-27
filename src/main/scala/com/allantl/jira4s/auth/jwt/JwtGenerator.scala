@@ -18,6 +18,7 @@ private[jira4s] object JwtGenerator {
       acConfig: AtlassianConnectConfig
   ): Either[JwtGeneratorError, String] =
     for {
+      _ <- isSecretKeyLessThan256Bits(acContext)
       uri <- toJavaUri(uri)
       hostUri <- toJavaUri(acContext.instanceUrl)
       _ <- isAbsoluteUri(uri)
@@ -40,6 +41,10 @@ private[jira4s] object JwtGenerator {
       .left
       .map(_ => InvalidSigningError)
   }
+
+  private def isSecretKeyLessThan256Bits(implicit authContext: AuthContext): Either[JwtGeneratorError, Unit] =
+    if (authContext.accessToken.getBytes.length < (256 / 8)) Left(InvalidSecretKey)
+    else Right(())
 
   private def toJavaUri(str: String): Either[JwtGeneratorError, URI] =
     Try(new URI(str)).toEither.left.map(_ => InvalidUriError)

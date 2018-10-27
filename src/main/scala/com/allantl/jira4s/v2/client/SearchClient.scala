@@ -30,7 +30,7 @@ private[jira4s] trait SearchClient[R[_], T <: AuthContext] extends HasClient[R] 
       "fields" -> fields.map(_.mkString(",")),
       "expand" -> expand.map(_.map(_.show)).map(_.mkString(",")),
       "properties" -> properties.map(_.mkString(",")),
-      "fieldsByKeys" -> fieldsByKeys.toString
+      "fieldsByKeys" -> Some(fieldsByKeys.toString)
     )
     sttp
       .get(uri"$restEndpoint/search?$params")

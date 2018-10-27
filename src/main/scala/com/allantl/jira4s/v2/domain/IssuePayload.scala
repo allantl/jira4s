@@ -5,29 +5,29 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 import io.circe.syntax._
 
 case class IssuePayload(
-    fields: Seq[Field],
+    fields: Seq[IssueField],
     properties: Option[Seq[EntityProperty]] = None,
     update: Option[Json] = None
 ) {
-  def ++(additionalFields: Seq[Field]): IssuePayload = copy(fields = fields ++ additionalFields)
-  def ++(field: Field): IssuePayload = copy(fields = field +: fields)
+  def ++(additionalFields: Seq[IssueField]): IssuePayload = copy(fields = fields ++ additionalFields)
+  def ++(field: IssueField): IssuePayload = copy(fields = field +: fields)
   def ++(property: EntityProperty): IssuePayload =
     copy(properties = properties.map(_ :+ property).orElse(Some(Seq(property))))
 }
 
 object IssuePayload {
 
-  def apply(fields: Field*): IssuePayload =
+  def apply(fields: IssueField*): IssuePayload =
     IssuePayload(fields = fields)
 
-  def apply(field: Field): IssuePayload =
+  def apply(field: IssueField): IssuePayload =
     IssuePayload(Seq(field))
 
   implicit val issuePayloadEncoder: Encoder[IssuePayload] = new Encoder[IssuePayload] {
     override def apply(p: IssuePayload) = {
 
-      def convertField(field: Field): (String, Json) = field match {
-        case Field(fieldId, fieldValue) => fieldId -> fieldValue
+      def convertField(field: IssueField): (String, Json) = field match {
+        case IssueField(fieldId, fieldValue) => fieldId -> fieldValue
       }
       val fieldsJson = Json.obj(p.fields.map(convertField): _*)
 
@@ -47,7 +47,7 @@ object IssuePayload {
           .as[Map[String, Json]]
           .map(_.toSeq.map {
             case (key, value) =>
-              Field(key, value)
+              IssueField(key, value)
           })
         properties <- c.downField("properties").as[Option[Seq[EntityProperty]]]
         update <- c.downField("update").as[Option[Json]]
@@ -55,22 +55,22 @@ object IssuePayload {
   }
 }
 
-case class Field(id: String, value: Json)
+case class IssueField(id: String, value: Json)
 
-object Field {
-  def apply(id: String, value: String): Field = Field(id, Json.fromString(value))
+object IssueField {
+  def apply(id: String, value: String): IssueField = IssueField(id, Json.fromString(value))
 
-  def apply(id: String, value: Long): Field = Field(id, Json.fromLong(value))
+  def apply(id: String, value: Long): IssueField = IssueField(id, Json.fromLong(value))
 
-  def apply(id: String, value: Int): Field = Field(id, Json.fromInt(value))
+  def apply(id: String, value: Int): IssueField = IssueField(id, Json.fromInt(value))
 
-  def apply(id: String, value: Boolean): Field = Field(id, Json.fromBoolean(value))
+  def apply(id: String, value: Boolean): IssueField = IssueField(id, Json.fromBoolean(value))
 
-  def apply(id: String, value: (String, String)): Field =
-    Field(id, Json.obj((value._1, Json.fromString(value._2))))
+  def apply(id: String, value: (String, String)): IssueField =
+    IssueField(id, Json.obj((value._1, Json.fromString(value._2))))
 
-  implicit val fieldEncoder: Encoder[Field] = deriveEncoder
-  implicit val fieldDecoder: Decoder[Field] = deriveDecoder
+  implicit val fieldEncoder: Encoder[IssueField] = deriveEncoder
+  implicit val fieldDecoder: Decoder[IssueField] = deriveDecoder
 }
 
 case class IssueCreateResponse(id: String, key: String, self: String)

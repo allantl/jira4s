@@ -4,7 +4,7 @@ import com.allantl.jira4s.auth._
 import com.allantl.jira4s.auth.jwt.JwtGenerator
 import com.allantl.jira4s.v2
 import com.allantl.jira4s.v2.domain.errors._
-import com.softwaremill.sttp.{DeserializationError, Request, Response, StatusCodes, SttpBackend}
+import com.softwaremill.sttp.{DeserializationError, MediaTypes, Request, Response, StatusCodes, SttpBackend}
 import io.circe.parser._
 
 private[jira4s] trait HasAuthConfig {
@@ -25,7 +25,7 @@ private[jira4s] trait HasAuthConfig {
 private[jira4s] trait HasBackend[R[_]] {
   protected lazy val rm = backend.responseMonad
 
-  protected def backend: SttpBackend[R, _]
+  protected def backend: SttpBackend[R, Nothing]
 }
 
 private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
@@ -56,22 +56,24 @@ private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
   }
 
   implicit class RequestOps[T](req: Request[T, Nothing]) {
-    def jiraAuthenticated[Ctx <: AuthContext](implicit userCtx: Ctx): Request[T, Nothing] =
+    def jiraAuthenticated[Ctx <: AuthContext](implicit userCtx: Ctx): Request[T, Nothing] = {
+      val jsonReq = req.contentType(MediaTypes.Json)
       authConfig match {
         case BasicAuthentication(_, username, password) =>
-          req.auth.basic(username, password)
+          jsonReq.auth.basic(username, password)
         case ApiToken(_, email, apiToken) =>
-          req.auth.basic(email, apiToken)
+          jsonReq.auth.basic(email, apiToken)
         case ac: AtlassianConnectConfig =>
           JwtGenerator
             .generateToken(req.method.m.capitalize, req.uri.toString())(userCtx, ac)
             .fold(
-              _ => req,
-              token => req.header("Authorization", s"JWT $token", replaceExisting = true)
+              _ => jsonReq,
+              token => jsonReq.header("Authorization", s"JWT $token", replaceExisting = true)
             )
         case _ =>
-          req.auth.bearer(userCtx.accessToken)
+          jsonReq.auth.bearer(userCtx.accessToken)
       }
+    }
   }
 
   implicit class _ResponseOps(r: R[Response[String]]) {

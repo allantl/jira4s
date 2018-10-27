@@ -10,7 +10,7 @@ object Changelog {
   implicit val encoder: Encoder[Changelog] = deriveEncoder
 }
 
-case class History(id: String, author: Author, created: String, items: List[HistoryItem])
+case class History(id: String, author: User, created: String, items: List[HistoryItem])
 
 object History {
   implicit val decoder: Decoder[History] = deriveDecoder
@@ -58,21 +58,4 @@ object HistoryItem {
         to,
         toString
     )
-}
-
-case class Author(
-    self: String,
-    name: String,
-    key: String,
-    accountId: String,
-    emailAddress: String,
-    avatarUrls: Json,
-    displayName: String,
-    active: Boolean,
-    timeZone: String
-)
-
-object Author {
-  implicit val decoder: Decoder[Author] = deriveDecoder
-  implicit val encoder: Encoder[Author] = deriveEncoder
 }
