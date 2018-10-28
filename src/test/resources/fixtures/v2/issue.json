@@ -1,0 +1,170 @@
+{
+  "expand": "renderedFields,names,schema,operations,editmeta,changelog,versionedRepresentations",
+  "id": "10007",
+  "self": "https://yourdomain.atlassian.net/rest/api/2/issue/10007",
+  "key": "TES-1",
+  "fields": {
+    "issuetype": {
+      "self": "https://yourdomain.atlassian.net/rest/api/2/issuetype/10002",
+      "id": "10002",
+      "description": "A task that needs to be done.",
+      "iconUrl": "https://yourdomain.atlassian.net/secure/viewavatar?size=xsmall&avatarId=10318&avatarType=issuetype",
+      "name": "Task",
+      "subtask": false,
+      "avatarId": 10318
+    },
+    "timespent": null,
+    "customfield_10030": null,
+    "project": {
+      "self": "https://yourdomain.atlassian.net/rest/api/2/project/10008",
+      "id": "10008",
+      "key": "TES",
+      "name": "TEST",
+      "projectTypeKey": "business",
+      "avatarUrls": {
+        "48x48": "https://yourdomain.atlassian.net/secure/projectavatar?avatarId=10324",
+        "24x24": "https://yourdomain.atlassian.net/secure/projectavatar?size=small&avatarId=10324",
+        "16x16": "https://yourdomain.atlassian.net/secure/projectavatar?size=xsmall&avatarId=10324",
+        "32x32": "https://yourdomain.atlassian.net/secure/projectavatar?size=medium&avatarId=10324"
+      }
+    },
+    "fixVersions": [],
+    "aggregatetimespent": null,
+    "resolution": null,
+    "customfield_10028": null,
+    "customfield_10029": null,
+    "resolutiondate": null,
+    "workratio": -1,
+    "lastViewed": "2018-10-28T18:29:29.702+0800",
+    "watches": {
+      "self": "https://yourdomain.atlassian.net/rest/api/2/issue/TES-1/watchers",
+      "watchCount": 1,
+      "isWatching": true
+    },
+    "created": "2018-10-28T18:29:18.580+0800",
+    "customfield_10020": null,
+    "customfield_10021": [],
+    "customfield_10022": null,
+    "priority": {
+      "self": "https://yourdomain.atlassian.net/rest/api/2/priority/3",
+      "iconUrl": "https://yourdomain.atlassian.net/images/icons/priorities/medium.svg",
+      "name": "Medium",
+      "id": "3"
+    },
+    "customfield_10023": null,
+    "customfield_10024": null,
+    "labels": [],
+    "customfield_10016": null,
+    "customfield_10017": null,
+    "customfield_10018": null,
+    "customfield_10019": "0|i0000v:",
+    "timeestimate": null,
+    "aggregatetimeoriginalestimate": null,
+    "versions": [],
+    "issuelinks": [],
+    "assignee": null,
+    "updated": "2018-10-28T18:29:18.580+0800",
+    "status": {
+      "self": "https://yourdomain.atlassian.net/rest/api/2/status/10000",
+      "description": "",
+      "iconUrl": "https://yourdomain.atlassian.net/",
+      "name": "To Do",
+      "id": "10000",
+      "statusCategory": {
+        "self": "https://yourdomain.atlassian.net/rest/api/2/statuscategory/2",
+        "id": 2,
+        "key": "new",
+        "colorName": "blue-gray",
+        "name": "To Do"
+      }
+    },
+    "components": [],
+    "timeoriginalestimate": null,
+    "description": null,
+    "customfield_10013": null,
+    "customfield_10014": null,
+    "timetracking": {},
+    "customfield_10015": {
+      "hasEpicLinkFieldDependency": false,
+      "showField": false,
+      "nonEditableReason": {
+        "reason": "PLUGIN_LICENSE_ERROR",
+        "message": "Portfolio for Jira must be licensed for the Parent Link to be available."
+      }
+    },
+    "customfield_10005": null,
+    "customfield_10006": null,
+    "security": null,
+    "customfield_10007": null,
+    "customfield_10008": null,
+    "aggregatetimeestimate": null,
+    "customfield_10009": null,
+    "attachment": [],
+    "summary": "Issue One",
+    "creator": {
+      "self": "https://yourdomain.atlassian.net/rest/api/2/user?username=admin",
+      "name": "admin",
+      "key": "admin",
+      "accountId": "557058:d4e3b3c7-0699-401c-8727-2a432c62b5f9",
+      "emailAddress": "helloworld@gmail.com",
+      "avatarUrls": {
+        "48x48": "https://avatar-cdn.atlassian.com/c5d3fe36f66c7fc720d41ac6d78fef50?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fc5d3fe36f66c7fc720d41ac6d78fef50%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue",
+        "24x24": "https://avatar-cdn.atlassian.com/c5d3fe36f66c7fc720d41ac6d78fef50?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fc5d3fe36f66c7fc720d41ac6d78fef50%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue",
+        "16x16": "https://avatar-cdn.atlassian.com/c5d3fe36f66c7fc720d41ac6d78fef50?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fc5d3fe36f66c7fc720d41ac6d78fef50%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue",
+        "32x32": "https://avatar-cdn.atlassian.com/c5d3fe36f66c7fc720d41ac6d78fef50?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fc5d3fe36f66c7fc720d41ac6d78fef50%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"
+      },
+      "displayName": "AllanL",
+      "active": true,
+      "timeZone": "Asia/Shanghai"
+    },
+    "subtasks": [],
+    "reporter": {
+      "self": "https://yourdomain.atlassian.net/rest/api/2/user?username=admin",
+      "name": "admin",
+      "key": "admin",
+      "accountId": "557058:d4e3b3c7-0699-401c-8727-2a432c62b5f9",
+      "emailAddress": "helloworld@gmail.com",
+      "avatarUrls": {
+        "48x48": "https://avatar-cdn.atlassian.com/c5d3fe36f66c7fc720d41ac6d78fef50?s=48&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fc5d3fe36f66c7fc720d41ac6d78fef50%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue",
+        "24x24": "https://avatar-cdn.atlassian.com/c5d3fe36f66c7fc720d41ac6d78fef50?s=24&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fc5d3fe36f66c7fc720d41ac6d78fef50%3Fd%3Dmm%26s%3D24%26noRedirect%3Dtrue",
+        "16x16": "https://avatar-cdn.atlassian.com/c5d3fe36f66c7fc720d41ac6d78fef50?s=16&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fc5d3fe36f66c7fc720d41ac6d78fef50%3Fd%3Dmm%26s%3D16%26noRedirect%3Dtrue",
+        "32x32": "https://avatar-cdn.atlassian.com/c5d3fe36f66c7fc720d41ac6d78fef50?s=32&d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2Fc5d3fe36f66c7fc720d41ac6d78fef50%3Fd%3Dmm%26s%3D32%26noRedirect%3Dtrue"
+      },
+      "displayName": "AllanL",
+      "active": true,
+      "timeZone": "Asia/Shanghai"
+    },
+    "aggregateprogress": {
+      "progress": 0,
+      "total": 0
+    },
+    "customfield_10000": "{}",
+    "customfield_10001": null,
+    "customfield_10002": null,
+    "customfield_10003": null,
+    "customfield_10004": null,
+    "environment": null,
+    "duedate": null,
+    "progress": {
+      "progress": 0,
+      "total": 0
+    },
+    "comment": {
+      "comments": [],
+      "maxResults": 0,
+      "total": 0,
+      "startAt": 0
+    },
+    "votes": {
+      "self": "https://yourdomain.atlassian.net/rest/api/2/issue/TES-1/votes",
+      "votes": 0,
+      "hasVoted": false
+    },
+    "worklog": {
+      "startAt": 0,
+      "maxResults": 20,
+      "total": 0,
+      "worklogs": []
+    }
+  }
+}
