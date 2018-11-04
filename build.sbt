@@ -2,11 +2,16 @@ name := "jira4s"
 
 organization := "com.allantl"
 
-scalaVersion := "2.12.7"
+val scala211Version = "2.11.112"
+val scala212Version = "2.12.7"
 
-val CirceVersion = "0.10.0"
+scalaVersion := scala212Version
+crossScalaVersions := Seq(scala212Version, scala211Version)
+
+val CirceVersion = "0.10.1"
 val AtlassianJwtVersion = "0.1.5"
 val Specs2Version = "4.2.0"
+val SttpVersion = "1.4.2"
 
 libraryDependencies ++= Seq(
   "io.circe" %% "circe-core" % CirceVersion,
@@ -14,8 +19,8 @@ libraryDependencies ++= Seq(
   "io.circe" %% "circe-parser" % CirceVersion,
   "io.toolsplus" %% "atlassian-jwt-generators" % AtlassianJwtVersion,
   "io.toolsplus" %% "atlassian-jwt-core" % AtlassianJwtVersion,
-  "com.softwaremill.sttp" %% "core" % "1.4.2",
-  "com.softwaremill.sttp" %% "circe" % "1.4.2"
+  "com.softwaremill.sttp" %% "core" % SttpVersion,
+  "com.softwaremill.sttp" %% "circe" % SttpVersion
 )
 
 libraryDependencies ++= Seq(
