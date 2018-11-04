@@ -16,7 +16,7 @@ class JwtGeneratorSpec extends Specification {
   val atlassianUrl = "http://www.allantl.atlassian.net"
   implicit val acConfig = AtlassianConnectConfig("com.allantl.http4s", 5L)
 
-  "JWT Generator" should {
+  "JWTGenerator" should {
     "fail if URI does not match with host" in {
       implicit val ctx = MockAuthContext(atlassianUrl)
       val result = JwtGenerator.generateToken("GET", "https://www.google.com")

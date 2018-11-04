@@ -7,7 +7,7 @@ import org.specs2.mutable.Specification
 
 class JiraSingleTenantClientSpec extends Specification {
 
-  "JiraSingleTenantClientTest" should {
+  "JiraSingleTenantClient" should {
     "initialize with api token" in {
       implicit val backend = HttpURLConnectionBackend()
 

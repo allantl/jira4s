@@ -7,7 +7,7 @@ import io.circe.parser._
 
 class IssuePayloadSpec extends Specification {
 
-  "Issue Payload" should {
+  "IssuePayload" should {
     "encode json successfully" in {
       val json = IssuePayload(IssueField("summary", "hello world")).asJson
       val expected = Json.obj(
