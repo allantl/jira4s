@@ -18,7 +18,7 @@ private[jira4s] trait HasAuthConfig {
     authConfig match {
       case BasicAuthentication(jiraUrl, _, _) => jiraUrl
       case ApiToken(jiraUrl, _, _) => jiraUrl
-      case _ => userCtx.instanceUrl
+      case AtlassianConnectConfig(_, _) => userCtx.instanceUrl
     }
 }
 
@@ -70,8 +70,6 @@ private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
               _ => jsonReq,
               token => jsonReq.header("Authorization", s"JWT $token", replaceExisting = true)
             )
-        case _ =>
-          jsonReq.auth.bearer(userCtx.accessToken)
       }
     }
   }

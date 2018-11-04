@@ -11,6 +11,17 @@ sealed trait JiraMultiTenantClient[R[_]]
     with FieldClient[R, AuthContext]
 
 object JiraMultiTenantClient {
+
+  def apply[R[_], S]()(
+    implicit sttpBackend: SttpBackend[R, S]
+  ): JiraMultiTenantClient[R] = {
+    val conf = Config.loadMultiTenantConfig()
+    new JiraMultiTenantClient[R] {
+      override protected lazy val backend = sttpBackend
+      override protected lazy val authConfig = conf
+    }
+  }
+
   def apply[R[_], S](acConfig: AtlassianConnectConfig)(
       implicit sttpBackend: SttpBackend[R, S]
   ): JiraMultiTenantClient[R] =

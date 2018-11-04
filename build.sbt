@@ -20,7 +20,8 @@ libraryDependencies ++= Seq(
   "io.toolsplus" %% "atlassian-jwt-generators" % AtlassianJwtVersion,
   "io.toolsplus" %% "atlassian-jwt-core" % AtlassianJwtVersion,
   "com.softwaremill.sttp" %% "core" % SttpVersion,
-  "com.softwaremill.sttp" %% "circe" % SttpVersion
+  "com.softwaremill.sttp" %% "circe" % SttpVersion,
+  "com.typesafe" % "config" % "1.3.2"
 )
 
 libraryDependencies ++= Seq(
