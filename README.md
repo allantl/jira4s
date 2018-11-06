@@ -21,6 +21,7 @@ This library exposes two types of client
 To initialize the client with authentication using `ApiToken` or `BasicAuthentication`
 
 ```scala
+import cats.Id
 import com.allantl.jira4s.auth.{ApiToken, BasicAuthentication}
 import com.allantl.jira4s.v2.JiraSingleTenantClient
 import com.softwaremill.sttp.HttpURLConnectionBackend
@@ -29,7 +30,7 @@ object Jira4S extends App {
     implicit val sttpBackend = HttpURLConnectionBackend()
 
     // ApiToken
-    val client = JiraSingleTenantClient(
+    val client: JiraSingleTenantClient[Id] = JiraSingleTenantClient(
         ApiToken(
           "jiraUrl",
           "email",
@@ -38,7 +39,7 @@ object Jira4S extends App {
     )
 
     // Basic Auth
-    val client2 = JiraSingleTenantClient(
+    val client2: JiraSingleTenantClient[Id] = JiraSingleTenantClient(
         BasicAuthentication(
           "jiraUrl",
           "email",
@@ -54,6 +55,7 @@ object Jira4S extends App {
 If you are developing an Atlassian Connect add-on
 
 ```scala
+import cats.Id
 import com.allantl.jira4s.auth.{AtlassianConnectConfig, AuthContext}
 import com.allantl.jira4s.v2.JiraMultiTenantClient
 import com.softwaremill.sttp.HttpURLConnectionBackend
@@ -63,7 +65,7 @@ object Jira4S extends App {
   implicit val sttpBackend = HttpURLConnectionBackend()
 
   val jwtExpirationInSeconds = 5L
-  val client = JiraMultiTenantClient(
+  val client: JiraMultiTenantClient[Id] = JiraMultiTenantClient(
     AtlassianConnectConfig(
       "addOnKey",
       jwtExpirationInSeconds
