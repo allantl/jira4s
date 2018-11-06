@@ -50,7 +50,7 @@ object CreateProjectInput {
         "name" -> Json.fromString(in.name),
         "projectTypeKey" -> in.projectTypeKey.asJson,
         "projectTemplateKey" -> Json.fromString(in.projectTemplateKey),
-        "assigneeType" -> in.assigneeType.asJson,
+        "assigneeType" -> in.assigneeType.asJson
       )
 
       val maybeNulls = Map(
@@ -75,10 +75,12 @@ object ProjectTypeKey {
   case object ServiceDesk extends ProjectTypeKey
   case object Business extends ProjectTypeKey
 
-  implicit val encoder: Encoder[ProjectTypeKey] = {
-    case Software => Json.fromString("software")
-    case ServiceDesk => Json.fromString("service_desk")
-    case Business => Json.fromString("business")
+  implicit val encoder: Encoder[ProjectTypeKey] = new Encoder[ProjectTypeKey] {
+    override def apply(p: ProjectTypeKey) = p match {
+      case Software => Json.fromString("software")
+      case ServiceDesk => Json.fromString("service_desk")
+      case Business => Json.fromString("business")
+    }
   }
 
   implicit val decoder: Decoder[ProjectTypeKey] =
@@ -108,9 +110,11 @@ object AssigneeType {
   case object ProjectLead extends AssigneeType
   case object Unassigned extends AssigneeType
 
-  implicit val encoder: Encoder[AssigneeType] = {
-    case ProjectLead => Json.fromString("PROJECT_LEAD")
-    case Unassigned => Json.fromString("UNASSIGNED")
+  implicit val encoder: Encoder[AssigneeType] = new Encoder[AssigneeType] {
+    override def apply(a: AssigneeType) = a match {
+      case ProjectLead => Json.fromString("PROJECT_LEAD")
+      case Unassigned => Json.fromString("UNASSIGNED")
+    }
   }
 
   implicit val decoder: Decoder[AssigneeType] =

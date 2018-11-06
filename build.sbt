@@ -6,10 +6,10 @@ val scala211Version = "2.11.112"
 val scala212Version = "2.12.7"
 
 scalaVersion := scala212Version
-crossScalaVersions := Seq(scala212Version)
+crossScalaVersions := Seq(scala212Version, scala211Version)
 
 val CirceVersion = "0.10.1"
-val AtlassianJwtVersion = "0.1.5"
+val AtlassianJwtVersion = "0.1.6"
 val Specs2Version = "4.2.0"
 val SttpVersion = "1.4.2"
 

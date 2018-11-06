@@ -18,12 +18,12 @@ private[jira4s] object JwtGenerator {
       acConfig: AtlassianConnectConfig
   ): Either[JwtGeneratorError, String] =
     for {
-      _ <- isSecretKeyLessThan256Bits(acContext)
-      uri <- toJavaUri(uri)
-      hostUri <- toJavaUri(acContext.instanceUrl)
-      _ <- isAbsoluteUri(uri)
-      _ <- isRequestToHost(uri, hostUri)
-      token <- createToken(httpMethod, uri)
+      _ <- isSecretKeyLessThan256Bits(acContext).right
+      uri <- toJavaUri(uri).right
+      hostUri <- toJavaUri(acContext.instanceUrl).right
+      _ <- isAbsoluteUri(uri).right
+      _ <- isRequestToHost(uri, hostUri).right
+      token <- createToken(httpMethod, uri).right
     } yield token
 
   private def createToken(httpMethod: String, uri: URI)(
@@ -47,7 +47,7 @@ private[jira4s] object JwtGenerator {
     else Right(())
 
   private def toJavaUri(str: String): Either[JwtGeneratorError, URI] =
-    Try(new URI(str)).toEither.left.map(_ => InvalidUriError)
+    Try(new URI(str)).toOption.toRight(InvalidUriError)
 
   private def isAbsoluteUri(uri: URI): Either[JwtGeneratorError, URI] =
     if (uri.isAbsolute) Right(uri) else Left(RelativeUriError)

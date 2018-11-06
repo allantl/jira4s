@@ -28,34 +28,39 @@ case class HistoryItem(
 
 object HistoryItem {
 
-  implicit val encoder: Encoder[HistoryItem] = (hi: HistoryItem) =>
-    Json.obj(
-      ("field", Json.fromString(hi.field)),
-      ("fieldtype", Json.fromString(hi.fieldType)),
-      ("fieldId", Json.fromString(hi.fieldId)),
-      ("from", hi.from.fold(Json.Null)(Json.fromString)),
-      ("fromString", hi.fromString.fold(Json.Null)(Json.fromString)),
-      ("to", hi.to.fold(Json.Null)(Json.fromString)),
-      ("toString", hi.to.fold(Json.Null)(Json.fromString))
-  )
+  implicit val encoder: Encoder[HistoryItem] = new Encoder[HistoryItem] {
+    override def apply(hi: HistoryItem): Json =
+      Json.obj(
+        ("field", Json.fromString(hi.field)),
+        ("fieldtype", Json.fromString(hi.fieldType)),
+        ("fieldId", Json.fromString(hi.fieldId)),
+        ("from", hi.from.fold(Json.Null)(Json.fromString)),
+        ("fromString", hi.fromString.fold(Json.Null)(Json.fromString)),
+        ("to", hi.to.fold(Json.Null)(Json.fromString)),
+        ("toString", hi.to.fold(Json.Null)(Json.fromString))
+      )
+  }
 
-  implicit val decoder: Decoder[HistoryItem] = (c: HCursor) =>
-    for {
-      field <- c.downField("field").as[String]
-      fieldType <- c.downField("fieldtype").as[String]
-      fieldId <- c.downField("fieldId").as[String]
-      from <- c.downField("from").as[Option[String]]
-      fromString <- c.downField("fromString").as[Option[String]]
-      to <- c.downField("to").as[Option[String]]
-      toString <- c.downField("toString").as[Option[String]]
-    } yield
-      HistoryItem(
-        field,
-        fieldType,
-        fieldId,
-        from,
-        fromString,
-        to,
-        toString
-    )
+  implicit val decoder: Decoder[HistoryItem] = new Decoder[HistoryItem] {
+    override def apply(c: HCursor): Decoder.Result[HistoryItem] =
+      for {
+        field <- c.downField("field").as[String].right
+        fieldType <- c.downField("fieldtype").as[String].right
+        fieldId <- c.downField("fieldId").as[String].right
+        from <- c.downField("from").as[Option[String]].right
+        fromString <- c.downField("fromString").as[Option[String]].right
+        to <- c.downField("to").as[Option[String]].right
+        toString <- c.downField("toString").as[Option[String]].right
+      } yield
+        HistoryItem(
+          field,
+          fieldType,
+          fieldId,
+          from,
+          fromString,
+          to,
+          toString
+        )
+  }
+
 }

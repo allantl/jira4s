@@ -4,58 +4,57 @@ import com.allantl.jira4s.auth.{ApiToken, AtlassianConnectConfig, AuthConfig, Ba
 import com.typesafe.config.ConfigFactory
 
 import scala.util.Try
+import ConfigImplicits._
 
 private[jira4s] object Config {
 
-  private val config = ConfigFactory.load
+  private implicit val config = ConfigFactory.load
 
-  private def getConfig(path: String): String = {
-    config.getString(s"jira4s.$path")
-  }
+  private val urlEnv = "URL"
+  private val emailEnv = "EMAIL"
+  private val apiTokenEnv = "API_TOKEN"
+  private val passwordEnv = "PASSWORD"
 
-  private def loadBasicAuth(): BasicAuthentication = {
-    val jiraUrl = getConfig("jira-url")
-    val username = getConfig("username")
-    val password = getConfig("password")
+  private def loadApiToken(): Option[ApiToken] =
+    ("jira-url", "email", "api-token")
+      .loadConfig((x, y, z) => Some(ApiToken(x, y, z)))
+      .orElse(
+        (urlEnv, emailEnv, apiTokenEnv)
+          .loadEnv((x, y, z) => Some(ApiToken(x, y, z)))
+      )
 
-    BasicAuthentication(jiraUrl, username, password)
-  }
+  private def loadBasicAuth(): Option[BasicAuthentication] =
+    ("jira-url", "email", "password")
+      .loadConfig((x, y, z) => Some(BasicAuthentication(x, y, z)))
+      .orElse(
+        (urlEnv, emailEnv, passwordEnv)
+          .loadEnv((x, y, z) => Some(BasicAuthentication(x, y, z)))
+      )
 
-  private def loadApiToken(): ApiToken = {
-    val jiraUrl = getConfig("jira-url")
-    val email = getConfig("email")
-    val apiToken = getConfig("api-token")
+  private def loadAcConfig(): Option[AtlassianConnectConfig] = {
+    val expStringToLong = (exp: String) => Try(exp.toLong).toOption
 
-    ApiToken(jiraUrl, email, apiToken)
-  }
-
-  private def loadAcConfig(): AtlassianConnectConfig = {
-    val addOnKey = getConfig("add-on-key")
-    val jwtExpiration = getConfig("jwt-expiration-in-seconds").toLong
-
-    AtlassianConnectConfig(addOnKey, jwtExpiration)
+    ("add-on-key", "jwt-expiration-in-seconds")
+      .loadConfig((addOnKey, jwtExp) =>
+        expStringToLong(jwtExp).map(AtlassianConnectConfig(addOnKey, _)))
+      .orElse(
+        ("ADD_ON_KEY", "JWT_EXPIRATION_IN_SECONDS").loadEnv((addOnKey, jwtExp) =>
+          expStringToLong(jwtExp).map(AtlassianConnectConfig(addOnKey, _)))
+      )
   }
 
   def loadSingleTenantConfig(): AuthConfig = {
-    val conf = Try(loadApiToken()).recoverWith {
-      case _ => Try(loadBasicAuth())
-    }
-
-    if (conf.isFailure) {
+    val config: Option[AuthConfig] = loadApiToken().orElse(loadBasicAuth())
+    config.fold(
       throw new RuntimeException(s"[jira4s] Configuration for single tenant client not specified")
-    } else {
-      conf.get
-    }
+    )(identity)
   }
 
   def loadMultiTenantConfig(): AuthConfig = {
-    val conf = Try(loadAcConfig())
-
-    if (conf.isFailure) {
+    val config: Option[AuthConfig] = loadAcConfig()
+    config.fold(
       throw new RuntimeException(s"[jira4s] Configuration for multi tenant client invalid/not specified")
-    } else {
-      conf.get
-    }
+    )(identity)
   }
 
 }

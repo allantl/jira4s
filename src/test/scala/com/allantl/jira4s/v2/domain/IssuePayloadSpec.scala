@@ -13,7 +13,7 @@ class IssuePayloadSpec extends Specification {
       val expected = Json.obj(
         "fields" -> Json.obj(("summary", Json.fromString("hello world"))),
         "properties" -> Json.Null,
-        "update" -> Json.Null,
+        "update" -> Json.Null
       )
 
       (json.noSpaces must be).equalTo(expected.noSpaces)
@@ -44,7 +44,7 @@ class IssuePayloadSpec extends Specification {
       val rawJson =
         """{"update":{"worklog":[{"add":{"started":"2011-07-05T11:05:00.000+0000","timeSpent":"60m"}}]},"fields":{"project":{"id":"10000"},"summary":"something's wrong","issuetype":{"id":"10000"}},"properties":[{"key":"key1","value":"A value"},{"key":"key2","value":{"o":"some object"}}]}""".stripMargin
 
-      val payload = parse(rawJson).map(_.as[IssuePayload])
+      val payload = parse(rawJson).right.map(_.as[IssuePayload])
       payload must beRight
     }
   }

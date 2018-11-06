@@ -14,7 +14,7 @@ package object utils {
   def assertStringBody[S](req: RequestBody[S])(assert: Map[String, Json] => Boolean): Boolean =
     req match {
       case StringBody(s, _, _) =>
-        parse(s).toOption.flatMap(_.as[Map[String, Json]].toOption).fold(false)(assert)
+        parse(s).right.toOption.flatMap(_.as[Map[String, Json]].right.toOption).fold(false)(assert)
 
       case _ =>
         false

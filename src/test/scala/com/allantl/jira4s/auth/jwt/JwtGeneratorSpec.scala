@@ -50,7 +50,7 @@ class JwtGeneratorSpec extends Specification {
       implicit val ctx = MockAuthContext(atlassianUrl)
       val jwtToken = JwtGenerator.generateToken("GET", atlassianUrl)
 
-      val expiry = jwtToken.flatMap(JwtParser.parse).map(_.claims.getExpirationTime.getTime / 1000)
+      val expiry = jwtToken.right.flatMap(JwtParser.parse).right.map(_.claims.getExpirationTime.getTime / 1000)
       val now = System.currentTimeMillis / 1000
       val expectedExpiry = now + acConfig.jwtExpirationInSeconds
 

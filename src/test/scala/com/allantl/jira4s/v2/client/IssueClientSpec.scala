@@ -66,7 +66,7 @@ class IssueClientSpec extends Specification {
       val res = client.updateIssue(
         issueId,
         IssuePayload(
-          IssueField("summary", "Updated"),
+          IssueField("summary", "Updated")
         )
       )
 
