@@ -29,7 +29,7 @@ class IssueClientSpec extends Specification {
             r.uri.path.endsWith(List("issue")) &&
             assertStringBody(r.body)(m => {
               val fields =
-                (s: String) => m.get("fields").flatMap(_.hcursor.downField(s).as[Json].toOption)
+                (s: String) => m.get("fields").flatMap(_.hcursor.downField(s).as[Json].right.toOption)
               fields("project").contains(Json.obj("id" -> Json.fromString("10000"))) &&
               fields("summary").contains(Json.fromString("An Issue")) &&
               fields("issuetype").contains(Json.obj("id" -> Json.fromString("10000")))
@@ -56,7 +56,7 @@ class IssueClientSpec extends Specification {
             r.uri.path.endsWith(List("issue", issueId)) &&
             assertStringBody(r.body)(m => {
               val fields =
-                (s: String) => m.get("fields").flatMap(_.hcursor.downField(s).as[Json].toOption)
+                (s: String) => m.get("fields").flatMap(_.hcursor.downField(s).as[Json].right.toOption)
               fields("summary").contains(Json.fromString("Updated"))
             })
         }
