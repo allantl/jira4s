@@ -10,7 +10,7 @@ private[jira4s] object Config {
 
   private implicit val config = ConfigFactory.load
 
-  private val urlEnv = "URL"
+  private val urlEnv = "JIRA_URL"
   private val emailEnv = "EMAIL"
   private val apiTokenEnv = "API_TOKEN"
   private val passwordEnv = "PASSWORD"
