@@ -1,6 +1,6 @@
 package com.allantl.jira4s.v2
 
-import com.allantl.jira4s.auth.{ApiToken, AtlassianConnectConfig, AuthConfig, BasicAuthentication}
+import com.allantl.jira4s.auth.{ApiToken, AcJwtConfig, AuthConfig, BasicAuthentication}
 import com.typesafe.config.ConfigFactory
 
 import scala.util.Try
@@ -31,15 +31,15 @@ private[jira4s] object Config {
           .loadEnv((x, y, z) => Some(BasicAuthentication(x, y, z)))
       )
 
-  private def loadAcConfig(): Option[AtlassianConnectConfig] = {
+  private def loadAcConfig(): Option[AcJwtConfig] = {
     val expStringToLong = (exp: String) => Try(exp.toLong).toOption
 
     ("add-on-key", "jwt-expiration-in-seconds")
       .loadConfig((addOnKey, jwtExp) =>
-        expStringToLong(jwtExp).map(AtlassianConnectConfig(addOnKey, _)))
+        expStringToLong(jwtExp).map(AcJwtConfig(addOnKey, _)))
       .orElse(
         ("ADD_ON_KEY", "JWT_EXPIRATION_IN_SECONDS").loadEnv((addOnKey, jwtExp) =>
-          expStringToLong(jwtExp).map(AtlassianConnectConfig(addOnKey, _)))
+          expStringToLong(jwtExp).map(AcJwtConfig(addOnKey, _)))
       )
   }
 

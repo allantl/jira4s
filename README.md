@@ -56,7 +56,7 @@ If you are developing an Atlassian Connect add-on
 
 ```scala
 import cats.Id
-import com.allantl.jira4s.auth.{AtlassianConnectConfig, AuthContext}
+import com.allantl.jira4s.auth.{AcJwtConfig, AuthContext}
 import com.allantl.jira4s.v2.JiraMultiTenantClient
 import com.softwaremill.sttp.HttpURLConnectionBackend
 
@@ -66,7 +66,7 @@ object Jira4S extends App {
 
   val jwtExpirationInSeconds = 5L
   val client: JiraMultiTenantClient[Id] = JiraMultiTenantClient(
-    AtlassianConnectConfig(
+    AcJwtConfig(
       "addOnKey",
       jwtExpirationInSeconds
     )

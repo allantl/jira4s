@@ -6,6 +6,7 @@ import com.allantl.jira4s.v2
 import com.allantl.jira4s.v2.domain.errors._
 import com.softwaremill.sttp.{DeserializationError, MediaTypes, Request, Response, StatusCodes, SttpBackend}
 import io.circe.parser._
+import cats.syntax.either._
 
 private[jira4s] trait HasAuthConfig {
 
@@ -18,7 +19,7 @@ private[jira4s] trait HasAuthConfig {
     authConfig match {
       case BasicAuthentication(jiraUrl, _, _) => jiraUrl
       case ApiToken(jiraUrl, _, _) => jiraUrl
-      case AtlassianConnectConfig(_, _) => userCtx.instanceUrl
+      case AcJwtConfig(_, _) => userCtx.instanceUrl
     }
 }
 
@@ -30,8 +31,8 @@ private[jira4s] trait HasBackend[R[_]] {
 
 private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
 
-  private def parseError(errByte: Array[Byte], status: Int): JiraError = {
-    val jiraResponseError = parse(new String(errByte)).right.toOption
+  private def parseError(errorMsg: String, status: Int): JiraError = {
+    val jiraResponseError = parse(errorMsg).right.toOption
       .flatMap(_.as[JiraResponseError].right.toOption)
 
     val errMsg = jiraResponseError
@@ -63,7 +64,7 @@ private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
           jsonReq.auth.basic(username, password)
         case ApiToken(_, email, apiToken) =>
           jsonReq.auth.basic(email, apiToken)
-        case ac: AtlassianConnectConfig =>
+        case ac: AcJwtConfig =>
           JwtGenerator
             .generateToken(req.method.m.capitalize, req.uri.toString())(userCtx, ac)
             .fold(
@@ -75,25 +76,26 @@ private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
   }
 
   implicit class _ResponseOps(r: R[Response[String]]) {
-    def parseResponse_ : R[Either[JiraError, Unit]] = rm.map(r) {
-      case Response(Right(_), _, _, _, _) =>
-        Right(())
-
-      case Response(Left(errByte), statusCode, _, _, _) =>
-        Left(parseError(errByte, statusCode))
+    def parseResponse_ : R[Either[JiraError, Unit]] = rm.map(r) { resp =>
+      resp.body.bimap(
+        err => parseError(err, resp.code),
+        _ => ()
+      )
     }
   }
 
   implicit class ResponseOps[T](r: R[Response[Either[DeserializationError[io.circe.Error], T]]]) {
-    def parseResponse: R[Either[JiraError, T]] = rm.map(r) {
-      case Response(Right(result), _, _, _, _) =>
-        result.fold(
-          _ => Left(JsonDeserializationError),
-          res => Right(res)
-        )
+    def parseResponse: R[Either[JiraError, T]] = rm.map(r) { resp =>
+      resp.body match {
+        case Right(result) =>
+          result.fold(
+            _ => Left(JsonDeserializationError),
+            res => Right(res)
+          )
 
-      case Response(Left(errByte), statusCode, _, _, _) =>
-        Left(parseError(errByte, statusCode))
+        case Left(err) =>
+          Left(parseError(err, resp.code))
+      }
     }
   }
 }

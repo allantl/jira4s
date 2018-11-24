@@ -1,12 +1,7 @@
 package com.allantl.jira4s.auth.jwt
 
-import com.allantl.jira4s.auth.AtlassianConnectConfig
-import com.allantl.jira4s.auth.jwt.errors.{
-  BaseUrlMismatchError,
-  InvalidSecretKey,
-  JwtGeneratorError,
-  RelativeUriError
-}
+import com.allantl.jira4s.auth.AcJwtConfig
+import com.allantl.jira4s.auth.jwt.errors.{BaseUrlMismatchError, InvalidSecretKey, JwtGeneratorError, RelativeUriError}
 import com.allantl.jira4s.mocks.MockAuthContext
 import io.toolsplus.atlassian.jwt.JwtParser
 import org.specs2.mutable.Specification
@@ -14,7 +9,7 @@ import org.specs2.mutable.Specification
 class JwtGeneratorSpec extends Specification {
 
   val atlassianUrl = "http://www.allantl.atlassian.net"
-  implicit val acConfig = AtlassianConnectConfig("com.allantl.http4s", 5L)
+  implicit val acConfig = AcJwtConfig("com.allantl.http4s", 5L)
 
   "JWTGenerator" should {
     "fail if URI does not match with host" in {
@@ -46,7 +41,7 @@ class JwtGeneratorSpec extends Specification {
     }
 
     "set expiry token correctly" in {
-      implicit val acConfig = AtlassianConnectConfig("com.allantl.http4s", 5L)
+      implicit val acConfig = AcJwtConfig("com.allantl.http4s", 5L)
       implicit val ctx = MockAuthContext(atlassianUrl)
       val jwtToken = JwtGenerator.generateToken("GET", atlassianUrl)
 

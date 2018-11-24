@@ -10,5 +10,4 @@ case class BasicAuthentication(
 
 case class ApiToken(jiraUrl: String, email: String, apiToken: String) extends AuthConfig
 
-case class AtlassianConnectConfig(addOnKey: String, jwtExpirationInSeconds: Long) extends AuthConfig
-
+case class AcJwtConfig(addOnKey: String, jwtExpirationInSeconds: Long) extends AuthConfig

@@ -1,6 +1,6 @@
 package com.allantl.jira4s.v2
 
-import com.allantl.jira4s.auth.{AtlassianConnectConfig, AuthContext}
+import com.allantl.jira4s.auth.{AcJwtConfig, AuthContext}
 import com.allantl.jira4s.v2.client.{FieldClient, IssueClient, ProjectClient, SearchClient}
 import com.softwaremill.sttp.SttpBackend
 
@@ -22,7 +22,7 @@ object JiraMultiTenantClient {
     }
   }
 
-  def apply[R[_], S](acConfig: AtlassianConnectConfig)(
+  def apply[R[_], S](acConfig: AcJwtConfig)(
       implicit sttpBackend: SttpBackend[R, S]
   ): JiraMultiTenantClient[R] =
     new JiraMultiTenantClient[R] {

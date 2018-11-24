@@ -4,18 +4,18 @@ import java.net.URI
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 
-import com.allantl.jira4s.auth.{AtlassianConnectConfig, AuthContext}
+import com.allantl.jira4s.auth.{AcJwtConfig, AuthContext}
 import com.allantl.jira4s.auth.jwt.domain.CanonicalURIHttpRequest
 import com.allantl.jira4s.auth.jwt.errors._
 import io.toolsplus.atlassian.jwt.{HttpRequestCanonicalizer, JwtBuilder}
 
 import scala.util.Try
 
-private[jira4s] object JwtGenerator {
+object JwtGenerator {
 
   def generateToken(httpMethod: String, uri: String)(
       implicit acContext: AuthContext,
-      acConfig: AtlassianConnectConfig
+      acConfig: AcJwtConfig
   ): Either[JwtGeneratorError, String] =
     for {
       _ <- isSecretKeyLessThan256Bits(acContext).right
@@ -28,7 +28,7 @@ private[jira4s] object JwtGenerator {
 
   private def createToken(httpMethod: String, uri: URI)(
       implicit acContext: AuthContext,
-      acConfig: AtlassianConnectConfig
+      acConfig: AcJwtConfig
   ): Either[JwtGeneratorError, String] = {
     val canonicalHttpRequest = CanonicalURIHttpRequest(httpMethod, uri)
     val queryHash = HttpRequestCanonicalizer.computeCanonicalRequestHash(canonicalHttpRequest)
