@@ -2,7 +2,7 @@ name := "jira4s"
 
 organization := "com.allantl"
 
-val scala211Version = "2.11.112"
+val scala211Version = "2.11.12"
 val scala212Version = "2.12.7"
 
 scalaVersion := scala212Version
