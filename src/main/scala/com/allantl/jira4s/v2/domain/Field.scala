@@ -12,7 +12,7 @@ case class Field(
     navigable: Boolean,
     searchable: Boolean,
     clauseNames: List[String],
-    schema: Option[FieldSchema]
+    schema: FieldSchema
 )
 
 object Field {
