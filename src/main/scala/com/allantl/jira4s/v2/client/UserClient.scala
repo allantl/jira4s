@@ -22,4 +22,11 @@ private[jira4s] trait UserClient[R[_], T <: AuthContext] extends HasClient[R] {
       .send()
       .parseResponse
 
+  def getCurrentUser(expand: Set[UserExpand] = Set.empty)(implicit userCtx: T): R[Either[JiraError, JiraUser]] =
+    sttp
+      .get(uri"$restEndpoint/rest/api/2/myself?expand=${expand.map(_.show).mkString(",")}")
+      .jiraAuthenticated
+      .response(asJson[JiraUser])
+      .send()
+      .parseResponse
 }

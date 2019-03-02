@@ -6,10 +6,13 @@ import com.allantl.jira4s.v2.domain.enums.UserExpand
 class UserClientIT extends IntegrationTest {
 
   "UserClient" should {
-    "get user by account id" in {
+    "get myself and user by account id" in {
+
+      val myself = client.getCurrentUser()
+      myself must beRight
 
       val user = client.getUserById(
-        "557058:d4e3b3c7-0699-401c-8727-2a432c62b5f9",
+        myself.map(_.accountId).getOrElse(""),
         Set(UserExpand.Groups, UserExpand.ApplicationRoles)
       )
 
