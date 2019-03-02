@@ -16,7 +16,7 @@ private[jira4s] trait UserClient[R[_], T <: AuthContext] extends HasClient[R] {
       implicit userCtx: T
   ): R[Either[JiraError, JiraUser]] =
     sttp
-      .get(uri"$restEndpoint/rest/api/2/user?accountId=$accountId&expand=${expand.map(_.show).mkString(",")}")
+      .get(uri"$restEndpoint/user?accountId=$accountId&expand=${expand.map(_.show).mkString(",")}")
       .jiraAuthenticated
       .response(asJson[JiraUser])
       .send()
@@ -24,8 +24,9 @@ private[jira4s] trait UserClient[R[_], T <: AuthContext] extends HasClient[R] {
 
   def getCurrentUser(expand: Set[UserExpand] = Set.empty)(implicit userCtx: T): R[Either[JiraError, JiraUser]] =
     sttp
-      .get(uri"$restEndpoint/rest/api/2/myself?expand=${expand.map(_.show).mkString(",")}")
+      .get(uri"$restEndpoint/myself?expand=${expand.map(_.show).mkString(",")}")
       .jiraAuthenticated
+      .followRedirects(true)
       .response(asJson[JiraUser])
       .send()
       .parseResponse
