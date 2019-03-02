@@ -10,7 +10,7 @@ object Changelog {
   implicit val encoder: Encoder[Changelog] = deriveEncoder
 }
 
-case class History(id: String, author: User, created: String, items: List[HistoryItem])
+case class History(id: String, author: JiraUser, created: String, items: List[HistoryItem])
 
 object History {
   implicit val decoder: Decoder[History] = deriveDecoder
@@ -24,7 +24,8 @@ case class HistoryItem(
     from: Option[String],
     fromString: Option[String],
     to: Option[String],
-    tostring: Option[String])
+    tostring: Option[String]
+)
 
 object HistoryItem {
 

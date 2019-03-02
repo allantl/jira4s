@@ -1,7 +1,7 @@
 package com.allantl.jira4s.v2
 
 import com.allantl.jira4s.auth.{AcJwtConfig, AuthContext}
-import com.allantl.jira4s.v2.client.{FieldClient, IssueClient, ProjectClient, SearchClient}
+import com.allantl.jira4s.v2.client._
 import com.softwaremill.sttp.SttpBackend
 
 sealed trait JiraMultiTenantClient[R[_]]
@@ -9,6 +9,7 @@ sealed trait JiraMultiTenantClient[R[_]]
     with SearchClient[R, AuthContext]
     with ProjectClient[R, AuthContext]
     with FieldClient[R, AuthContext]
+    with UserClient[R, AuthContext]
 
 object JiraMultiTenantClient {
 

@@ -12,7 +12,7 @@ case class Project(
     id: String,
     key: String,
     description: Option[String],
-    lead: User,
+    lead: JiraUser,
     issueTypes: List[IssueType]
 )
 
