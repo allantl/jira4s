@@ -11,13 +11,15 @@ private[jira4s] trait IssueClient[R[_], T <: AuthContext] extends HasClient[R] {
 
   private implicit val be: SttpBackend[R, Nothing] = backend
 
-  def getIssue(issueId: String)(implicit userCtx: T): R[Either[JiraError, Issue]] =
+  def getIssue(issueId: String, fields: List[String] = List("*all"))(
+      implicit userCtx: T
+  ): R[Either[JiraError, Issue]] =
     sttp
-      .get(uri"$restEndpoint/issue/$issueId")
-      .jiraAuthenticated
-      .response(asJson[Issue])
-      .send()
-      .parseResponse
+    .get(uri"$restEndpoint/issue/$issueId?fields=${fields.mkString(",")}")
+    .jiraAuthenticated
+    .response(asJson[Issue])
+    .send()
+    .parseResponse
 
   def createIssue(issuePayload: IssuePayload, updateHistory: Boolean = false)(
       implicit userCtx: T
