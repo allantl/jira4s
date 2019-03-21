@@ -7,7 +7,7 @@ import com.allantl.jira4s.v2.domain.{IssueField, _}
 class IssueClientIT extends IntegrationTest with ProjectRefContext {
 
   "IssueClient" should {
-    "create issue" in projectRef() { p: ProjectRef =>
+    "create and get issue" in projectRef() { p: ProjectRef =>
       val payload = IssuePayload(
         IssueField("summary", "IT"),
         IssueField("project", "id" -> p.id.toString),
@@ -15,6 +15,11 @@ class IssueClientIT extends IntegrationTest with ProjectRefContext {
       )
       val issue = client.createIssue(payload)
       issue must beRight
+
+      val issueId = issue.right.toOption.map(_.id).getOrElse("")
+      val createdIssue = client.getIssue(issueId)
+
+      createdIssue must beRight
     }
   }
 }
