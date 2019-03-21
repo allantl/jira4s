@@ -12,7 +12,7 @@ class UserClientIT extends IntegrationTest {
       myself must beRight
 
       val user = client.getUserById(
-        myself.map(_.accountId).getOrElse(""),
+        myself.right.map(_.accountId).getOrElse(""),
         Set(UserExpand.Groups, UserExpand.ApplicationRoles)
       )
 
