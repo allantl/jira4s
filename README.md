@@ -1,6 +1,7 @@
 # Jira4s
 
 [![Build Status](https://travis-ci.org/allantl/jira4s.svg?branch=master)](https://travis-ci.org/allantl/jira4s)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.allantl/jira4s_2.12.svg)](https://maven-badges.herokuapp.com/maven-central/com.github.allantl/jira4s_2.12)
 
 [Atlassian Jira Client](https://developer.atlassian.com/cloud/jira/platform/rest/v2/) for Scala
 
