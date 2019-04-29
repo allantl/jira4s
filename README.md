@@ -13,6 +13,13 @@
 - [Typesafe Config](https://github.com/typesafehub/config)
 - [Atlassian JWT Scala](https://github.com/toolsplus/atlassian-jwt)
 
+## Getting Started
+
+Add the following to your build.sbt:
+```
+libraryDependencies += "com.github.allantl" %% "jira4s" % "0.0.1"
+```
+
 ## Usage
 
 This library exposes two types of client
