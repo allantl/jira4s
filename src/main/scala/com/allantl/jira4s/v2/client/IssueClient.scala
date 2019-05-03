@@ -15,11 +15,11 @@ private[jira4s] trait IssueClient[R[_], T <: AuthContext] extends HasClient[R] {
       implicit userCtx: T
   ): R[Either[JiraError, Issue]] =
     sttp
-    .get(uri"$restEndpoint/issue/$issueId?fields=${fields.mkString(",")}")
-    .jiraAuthenticated
-    .response(asJson[Issue])
-    .send()
-    .parseResponse
+      .get(uri"$restEndpoint/issue/$issueId?fields=${fields.mkString(",")}")
+      .jiraAuthenticated
+      .response(asJson[Issue])
+      .send()
+      .parseResponse
 
   def createIssue(issuePayload: IssuePayload, updateHistory: Boolean = false)(
       implicit userCtx: T
@@ -82,7 +82,7 @@ private[jira4s] trait IssueClient[R[_], T <: AuthContext] extends HasClient[R] {
       .parseResponse_
 
   def deleteIssueProperty(issueId: String, propertyKey: String)(
-    implicit userCtx: T
+      implicit userCtx: T
   ): R[Either[JiraError, Unit]] =
     sttp
       .delete(uri"$restEndpoint/issue/$issueId/properties/$propertyKey")

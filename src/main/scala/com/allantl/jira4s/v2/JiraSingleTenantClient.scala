@@ -10,6 +10,7 @@ sealed trait JiraSingleTenantClient[R[_]]
     with ProjectClient[R, NoCtx]
     with FieldClient[R, NoCtx]
     with UserClient[R, NoCtx]
+    with PriorityClient[R, NoCtx]
 
 object JiraSingleTenantClient {
 

@@ -10,6 +10,7 @@ sealed trait JiraMultiTenantClient[R[_]]
     with ProjectClient[R, AuthContext]
     with FieldClient[R, AuthContext]
     with UserClient[R, AuthContext]
+    with PriorityClient[R, AuthContext]
 
 object JiraMultiTenantClient {
 
