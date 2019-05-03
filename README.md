@@ -17,7 +17,7 @@
 
 Add the following to your build.sbt:
 ```
-libraryDependencies += "com.github.allantl" %% "jira4s" % "0.0.1"
+libraryDependencies += "com.github.allantl" %% "jira4s" % "0.0.2"
 ```
 
 ## Usage
