@@ -5,11 +5,11 @@ import io.circe.generic.semiauto.{deriveDecoder, deriveEncoder}
 
 case class Priority(
     self: String,
-    statusColor: String,
-    description: String,
-    iconUrl: String,
+    id: String,
     name: String,
-    id: String
+    iconUrl: Option[String],
+    statusColor: Option[String],
+    description: Option[String]
 )
 
 object Priority {
