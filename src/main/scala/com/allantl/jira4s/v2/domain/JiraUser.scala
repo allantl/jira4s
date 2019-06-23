@@ -5,8 +5,6 @@ import io.circe.{Decoder, Encoder}
 
 case class JiraUser(
     self: String,
-    name: String,
-    key: String,
     accountId: String,
     emailAddress: Option[String] = None,
     avatarUrls: Option[AvatarUrls] = None,
