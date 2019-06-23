@@ -13,8 +13,8 @@ crossScalaVersions := Seq(scala212Version, scala211Version)
 
 val CirceVersion = "0.11.0"
 val AtlassianJwtVersion = "0.1.6"
-val Specs2Version = "4.2.0"
-val SttpVersion = "1.5.0"
+val Specs2Version = "4.5.1"
+val SttpVersion = "1.6.0"
 
 lazy val publishSettings = Seq(
   releasePublishArtifactsAction := PgpKeys.publishSigned.value,
