@@ -1,0 +1,28 @@
+{
+  "self": "https://jira.evolutiongaming.com/rest/api/2/issue/1212135/worklog/773125",
+  "author": {
+    "self": "https://jira.evolutiongaming.com/rest/api/2/user?username=sbarouski",
+    "name": "sbarouski",
+    "key": "sbarouski",
+    "emailAddress": "sbarouski@evolutiongaming.com",
+    "displayName": "Siarhei Barouski",
+    "active": true,
+    "timeZone": "UTC"
+  },
+  "updateAuthor": {
+    "self": "https://jira.evolutiongaming.com/rest/api/2/user?username=sbarouski",
+    "name": "sbarouski",
+    "key": "sbarouski",
+    "emailAddress": "sbarouski@evolutiongaming.com",
+    "displayName": "Siarhei Barouski",
+    "active": true,
+    "timeZone": "UTC"
+  },
+  "comment": "Working on issue INT-29299",
+  "created": "2019-12-31T09:22:07.807+0000",
+  "updated": "2020-01-13T15:25:26.187+0000",
+  "started": "2019-12-30T12:22:00.000+0000",
+  "timeSpent": "1h",
+  "timeSpentSeconds": 3600,
+  "id": "773125"
+}
