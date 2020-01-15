@@ -14,5 +14,6 @@ object MockJiraSingleTenantClient {
         "https://www.test.atlassian.net",
         "email",
         "apiToken"
-      ))
+      )
+    )
 }

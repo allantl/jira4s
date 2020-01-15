@@ -15,7 +15,7 @@ sealed trait JiraMultiTenantClient[R[_]]
 object JiraMultiTenantClient {
 
   def apply[R[_], S]()(
-    implicit sttpBackend: SttpBackend[R, S]
+      implicit sttpBackend: SttpBackend[R, S]
   ): JiraMultiTenantClient[R] = {
     val conf = Config.loadMultiTenantConfig()
     new JiraMultiTenantClient[R] {

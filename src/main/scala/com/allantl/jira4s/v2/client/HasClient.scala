@@ -4,7 +4,14 @@ import com.allantl.jira4s.auth._
 import com.allantl.jira4s.auth.jwt.JwtGenerator
 import com.allantl.jira4s.v2
 import com.allantl.jira4s.v2.domain.errors._
-import com.softwaremill.sttp.{DeserializationError, MediaTypes, Request, Response, StatusCodes, SttpBackend}
+import com.softwaremill.sttp.{
+  DeserializationError,
+  MediaTypes,
+  Request,
+  Response,
+  StatusCodes,
+  SttpBackend
+}
 import io.circe.parser._
 import cats.syntax.either._
 
@@ -45,7 +52,8 @@ private[jira4s] trait HasClient[R[_]] extends HasAuthConfig with HasBackend[R] {
 
       case StatusCodes.Unauthorized =>
         errMsg.fold(UnauthorizedError("Invalid JIRA credentials or access forbidden!"))(
-          UnauthorizedError)
+          UnauthorizedError
+        )
 
       case StatusCodes.NotFound =>
         errMsg.fold(ResourceNotFound("Resource not found!"))(ResourceNotFound)

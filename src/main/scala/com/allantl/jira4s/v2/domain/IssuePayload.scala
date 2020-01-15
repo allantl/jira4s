@@ -9,7 +9,8 @@ case class IssuePayload(
     properties: Option[Seq[EntityProperty]] = None,
     update: Option[Json] = None
 ) {
-  def ++(additionalFields: Seq[IssueField]): IssuePayload = copy(fields = fields ++ additionalFields)
+  def ++(additionalFields: Seq[IssueField]): IssuePayload =
+    copy(fields = fields ++ additionalFields)
   def ++(field: IssueField): IssuePayload = copy(fields = field +: fields)
   def ++(property: EntityProperty): IssuePayload =
     copy(properties = properties.map(_ :+ property).orElse(Some(Seq(property))))
@@ -45,10 +46,12 @@ object IssuePayload {
         fields <- c
           .downField("fields")
           .as[Map[String, Json]]
-          .right.map(_.toSeq.map {
+          .right
+          .map(_.toSeq.map {
             case (key, value) =>
               IssueField(key, value)
-          }).right
+          })
+          .right
         properties <- c.downField("properties").as[Option[Seq[EntityProperty]]].right
         update <- c.downField("update").as[Option[Json]].right
       } yield IssuePayload(fields, properties, update)

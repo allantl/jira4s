@@ -1,7 +1,12 @@
 package com.allantl.jira4s.auth.jwt
 
 import com.allantl.jira4s.auth.AcJwtConfig
-import com.allantl.jira4s.auth.jwt.errors.{BaseUrlMismatchError, InvalidSecretKey, JwtGeneratorError, RelativeUriError}
+import com.allantl.jira4s.auth.jwt.errors.{
+  BaseUrlMismatchError,
+  InvalidSecretKey,
+  JwtGeneratorError,
+  RelativeUriError
+}
 import com.allantl.jira4s.mocks.MockAuthContext
 import io.toolsplus.atlassian.jwt.JwtParser
 import org.specs2.mutable.Specification
@@ -45,7 +50,8 @@ class JwtGeneratorSpec extends Specification {
       implicit val ctx = MockAuthContext(atlassianUrl)
       val jwtToken = JwtGenerator.generateToken("GET", atlassianUrl)
 
-      val expiry = jwtToken.right.flatMap(JwtParser.parse).right.map(_.claims.getExpirationTime.getTime / 1000)
+      val expiry =
+        jwtToken.right.flatMap(JwtParser.parse).right.map(_.claims.getExpirationTime.getTime / 1000)
       val now = System.currentTimeMillis / 1000
       val expectedExpiry = now + acConfig.jwtExpirationInSeconds
 

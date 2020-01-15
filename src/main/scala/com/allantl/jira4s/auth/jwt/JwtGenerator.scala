@@ -42,7 +42,9 @@ object JwtGenerator {
       .map(_ => InvalidSigningError)
   }
 
-  private def isSecretKeyLessThan256Bits(implicit authContext: AuthContext): Either[JwtGeneratorError, Unit] =
+  private def isSecretKeyLessThan256Bits(
+      implicit authContext: AuthContext
+  ): Either[JwtGeneratorError, Unit] =
     if (authContext.accessToken.getBytes.length < (256 / 8)) Left(InvalidSecretKey)
     else Right(())
 

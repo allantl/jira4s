@@ -15,7 +15,7 @@ sealed trait JiraSingleTenantClient[R[_]]
 object JiraSingleTenantClient {
 
   def apply[R[_], S]()(
-    implicit sttpBackend: SttpBackend[R, S]
+      implicit sttpBackend: SttpBackend[R, S]
   ): JiraSingleTenantClient[R] = {
     val conf = Config.loadSingleTenantConfig()
     new JiraSingleTenantClient[R] {

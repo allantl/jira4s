@@ -26,14 +26,14 @@ class IssueClientSpec extends Specification {
       implicit val testingBackend = backend
         .whenRequestMatches { r =>
           r.method.m == "POST" &&
-            r.uri.path.endsWith(List("issue")) &&
-            assertStringBody(r.body)(m => {
-              val fields =
-                (s: String) => m.get("fields").flatMap(_.hcursor.downField(s).as[Json].right.toOption)
-              fields("project").contains(Json.obj("id" -> Json.fromString("10000"))) &&
-              fields("summary").contains(Json.fromString("An Issue")) &&
-              fields("issuetype").contains(Json.obj("id" -> Json.fromString("10000")))
-            })
+          r.uri.path.endsWith(List("issue")) &&
+          assertStringBody(r.body) { m =>
+            val fields =
+              (s: String) => m.get("fields").flatMap(_.hcursor.downField(s).as[Json].right.toOption)
+            fields("project").contains(Json.obj("id" -> Json.fromString("10000"))) &&
+            fields("summary").contains(Json.fromString("An Issue")) &&
+            fields("issuetype").contains(Json.obj("id" -> Json.fromString("10000")))
+          }
         }
         .thenRespondWithCode(code = 201, msg = loadJson("issue-ref.json"))
 
@@ -53,12 +53,12 @@ class IssueClientSpec extends Specification {
       implicit val testingBackend = backend
         .whenRequestMatches { r =>
           r.method.m == "PUT" &&
-            r.uri.path.endsWith(List("issue", issueId)) &&
-            assertStringBody(r.body)(m => {
-              val fields =
-                (s: String) => m.get("fields").flatMap(_.hcursor.downField(s).as[Json].right.toOption)
-              fields("summary").contains(Json.fromString("Updated"))
-            })
+          r.uri.path.endsWith(List("issue", issueId)) &&
+          assertStringBody(r.body) { m =>
+            val fields =
+              (s: String) => m.get("fields").flatMap(_.hcursor.downField(s).as[Json].right.toOption)
+            fields("summary").contains(Json.fromString("Updated"))
+          }
         }
         .thenRespondWithCode(code = 204)
 

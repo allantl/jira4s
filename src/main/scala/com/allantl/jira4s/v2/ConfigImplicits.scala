@@ -13,7 +13,9 @@ private[jira4s] object ConfigImplicits {
     Try(config.getString(s"jira4s.$path")).toOption
 
   implicit class Tuple2Conf(tuple: (String, String)) {
-    def loadConfig[T](f: (String, String) => Option[T])(implicit config: TypesafeConfig): Option[T] =
+    def loadConfig[T](
+        f: (String, String) => Option[T]
+    )(implicit config: TypesafeConfig): Option[T] =
       for {
         c1 <- getConfig(tuple._1)
         c2 <- getConfig(tuple._2)
@@ -29,8 +31,9 @@ private[jira4s] object ConfigImplicits {
   }
 
   implicit class Tuple3Conf(tuple: (String, String, String)) {
-    def loadConfig[T](f: (String, String, String) => Option[T])(
-        implicit config: TypesafeConfig): Option[T] =
+    def loadConfig[T](
+        f: (String, String, String) => Option[T]
+    )(implicit config: TypesafeConfig): Option[T] =
       for {
         c1 <- getConfig(tuple._1)
         c2 <- getConfig(tuple._2)

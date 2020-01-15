@@ -8,7 +8,7 @@ import org.specs2.mutable.Specification
 class ClientErrorSpec extends Specification {
 
   val errorMsg =
-  """{"errorMessages":["Issue does not exist or you do not have permission to see it."],"errors":{}}"""
+    """{"errorMessages":["Issue does not exist or you do not have permission to see it."],"errors":{}}"""
 
   implicit val testingBackend = SttpBackendStub.synchronous
     .whenRequestMatches(_ => true)
@@ -20,7 +20,8 @@ class ClientErrorSpec extends Specification {
     "parse error from Jira" in {
       val res = client.getIssue("10000")
       res must beLeft.like {
-        case e: ResourceNotFound => e.msg == "Issue does not exist or you do not have permission to see it."
+        case e: ResourceNotFound =>
+          e.msg == "Issue does not exist or you do not have permission to see it."
       }
     }
   }

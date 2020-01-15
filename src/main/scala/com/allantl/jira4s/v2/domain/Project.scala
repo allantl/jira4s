@@ -103,7 +103,6 @@ object LeadInput {
   case class LeadAccountId(value: String) extends LeadInput
 }
 
-
 sealed trait AssigneeType
 
 object AssigneeType {

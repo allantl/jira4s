@@ -1,6 +1,6 @@
 package com.allantl.jira4s.v2
 
-import com.allantl.jira4s.auth.{ApiToken, AcJwtConfig, AuthConfig, BasicAuthentication}
+import com.allantl.jira4s.auth.{AcJwtConfig, ApiToken, AuthConfig, BasicAuthentication}
 import com.typesafe.config.ConfigFactory
 
 import scala.util.Try
@@ -35,11 +35,10 @@ private[jira4s] object Config {
     val expStringToLong = (exp: String) => Try(exp.toLong).toOption
 
     ("add-on-key", "jwt-expiration-in-seconds")
-      .loadConfig((addOnKey, jwtExp) =>
-        expStringToLong(jwtExp).map(AcJwtConfig(addOnKey, _)))
+      .loadConfig((addOnKey, jwtExp) => expStringToLong(jwtExp).map(AcJwtConfig(addOnKey, _)))
       .orElse(
-        ("ADD_ON_KEY", "JWT_EXPIRATION_IN_SECONDS").loadEnv((addOnKey, jwtExp) =>
-          expStringToLong(jwtExp).map(AcJwtConfig(addOnKey, _)))
+        ("ADD_ON_KEY", "JWT_EXPIRATION_IN_SECONDS")
+          .loadEnv((addOnKey, jwtExp) => expStringToLong(jwtExp).map(AcJwtConfig(addOnKey, _)))
       )
   }
 
@@ -53,7 +52,9 @@ private[jira4s] object Config {
   def loadMultiTenantConfig(): AuthConfig = {
     val config: Option[AuthConfig] = loadAcConfig()
     config.fold(
-      throw new RuntimeException(s"[jira4s] Configuration for multi tenant client invalid/not specified")
+      throw new RuntimeException(
+        s"[jira4s] Configuration for multi tenant client invalid/not specified"
+      )
     )(identity)
   }
 

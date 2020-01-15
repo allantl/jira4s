@@ -52,16 +52,15 @@ object HistoryItem {
         fromString <- c.downField("fromString").as[Option[String]].right
         to <- c.downField("to").as[Option[String]].right
         toString <- c.downField("toString").as[Option[String]].right
-      } yield
-        HistoryItem(
-          field,
-          fieldType,
-          fieldId,
-          from,
-          fromString,
-          to,
-          toString
-        )
+      } yield HistoryItem(
+        field,
+        fieldType,
+        fieldId,
+        from,
+        fromString,
+        to,
+        toString
+      )
   }
 
 }

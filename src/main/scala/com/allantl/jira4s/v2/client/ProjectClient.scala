@@ -19,7 +19,9 @@ private[jira4s] trait ProjectClient[R[_], T <: AuthContext] extends HasClient[R]
       .send()
       .parseResponse
 
-  def createProject(projectInput: CreateProjectInput)(implicit userCtx: T): R[Either[JiraError, ProjectRef]] =
+  def createProject(
+      projectInput: CreateProjectInput
+  )(implicit userCtx: T): R[Either[JiraError, ProjectRef]] =
     sttp
       .post(uri"$restEndpoint/project")
       .body(projectInput.asJson.noSpaces)
