@@ -5,7 +5,8 @@ import com.allantl.jira4s.v2.client._
 import com.softwaremill.sttp.SttpBackend
 
 sealed trait JiraMultiTenantClient[R[_]]
-    extends IssueClient[R, AuthContext]
+  extends IssueClient[R, AuthContext]
+    with WorkLogClient[R, AuthContext]
     with SearchClient[R, AuthContext]
     with ProjectClient[R, AuthContext]
     with FieldClient[R, AuthContext]
@@ -25,7 +26,7 @@ object JiraMultiTenantClient {
   }
 
   def apply[R[_], S](acConfig: AcJwtConfig)(
-      implicit sttpBackend: SttpBackend[R, S]
+    implicit sttpBackend: SttpBackend[R, S]
   ): JiraMultiTenantClient[R] =
     new JiraMultiTenantClient[R] {
       override protected lazy val backend = sttpBackend
