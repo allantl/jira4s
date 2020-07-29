@@ -5,6 +5,7 @@ import com.allantl.jira4s.v2.domain.{Issue, IssueCreateResponse, IssuePayload, I
 import com.allantl.jira4s.v2.domain.errors.JiraError
 import com.softwaremill.sttp._
 import com.softwaremill.sttp.circe._
+import io.circe.Json
 import io.circe.syntax._
 
 private[jira4s] trait IssueClient[R[_], T <: AuthContext] extends HasClient[R] {
@@ -47,6 +48,18 @@ private[jira4s] trait IssueClient[R[_], T <: AuthContext] extends HasClient[R] {
     sttp
       .put(uri"$restEndpoint/issue/$issueId".params(params))
       .body(issuePayload.asJson)
+      .jiraAuthenticated
+      .send()
+      .parseResponse_
+  }
+
+  def commentIssue(
+                   issueId: String,
+                   comment: String
+                 )(implicit userCtx: T): R[Either[JiraError, Unit]] = {
+    sttp
+      .post(uri"$restEndpoint/issue/$issueId/comment")
+      .body(Json.obj("body" -> Json.fromString(comment)))
       .jiraAuthenticated
       .send()
       .parseResponse_
